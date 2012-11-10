@@ -4,6 +4,7 @@ html, body {
   padding: 0;
   margin: 0;
   overflow: hidden;
+  font: 14pt Helvetica;
 }
 
 .wrapper {
@@ -11,6 +12,8 @@ html, body {
   height: 100%;
   text-align: center;
   margin: 0 auto;
+  position: relative;
+  z-index: 2;
 }
 
 .wrapper .content {

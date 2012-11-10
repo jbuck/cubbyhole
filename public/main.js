@@ -16,6 +16,25 @@
     }, 1000);
   }
 
+  function prepareFiles(files){
+    loadingDiv.classList.add('on');
+    fileInput.disabled = true;
+    inputDiv.classList.add('off');
+
+    Array.prototype.forEach.call(files, function(file){
+      var reader = new FileReader();
+      reader.onload = function(e){
+        upload(e.target.data);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function dropFiles(e){
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
   document.addEventListener('DOMContentLoaded', function(e){
 
     fileInput = document.querySelector('.file-input');
@@ -26,21 +45,12 @@
     uriContainer = document.querySelector('.uri-container');
 
     fileInputButton.addEventListener('click', function(e){
-
-      loadingDiv.classList.add('on');
-      fileInput.disabled = true;
-      inputDiv.classList.add('off');
-
-      Array.prototype.forEach.call(fileInput.files, function(file){
-        var reader = new FileReader();
-        reader.onload = function(e){
-          upload(e.target.data);
-        };
-        reader.readAsDataURL(file);
-      });
-
+      prepareFiles(fileInput.files);
     }, false);
 
+
+    document.addEventListener('drop', dropFiles, false);
+    document.querySelector('.wrapper').addEventListener('drop', dropFiles, false);
   }, false);
 
 }());
