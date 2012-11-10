@@ -1,5 +1,5 @@
 (function(){
-  
+
   var fileInput;
   var fileInputButton;
   var loadingDiv;
@@ -8,12 +8,7 @@
   var uriContainer;
 
   function upload(dataURI){
-    setTimeout(function(){
-      inputDiv.parentNode.removeChild(inputDiv);
-      uriContainer.innerHTML = "blarpy";
-      urlDiv.classList.add('on');
-      loadingDiv.classList.remove('on');
-    }, 1000);
+
   }
 
   function prepareFiles(files){
@@ -22,11 +17,43 @@
     inputDiv.classList.add('off');
 
     Array.prototype.forEach.call(files, function(file){
-      var reader = new FileReader();
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "/request", true);
+      xhr.addEventListener("load", function() {
+        var json = JSON.parse(this.responseText);
+
+        var form = new FormData();
+
+        form.append("policy", json.policyBase64);
+        form.append("signature", json.signature);
+        form.append("AWSAccessKeyId", json.key);
+
+        json.policy.conditions.forEach(function(condition) {
+          if (Array.isArray(condition)) {
+            switch (condition[0]) {
+            case "starts-with"
+
+              break;
+            }
+          } else {
+            // it's an object like {key: value}
+            Object.keys(condition).forEach(function(value) {
+              form.append(value, condition[value]);
+            });
+          }
+        });
+
+        form.append("file", file);
+
+
+      }, false);
+      xhr.send();
+
+      /*var reader = new FileReader();
       reader.onload = function(e){
         upload(e.target.data);
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(file);*/
     });
   }
 
