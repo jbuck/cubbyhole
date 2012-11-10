@@ -1,0 +1,56 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  font: 14pt Helvetica;
+}
+
+.wrapper {
+  display: table;
+  height: 100%;
+  text-align: center;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.wrapper .content {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.wrapper .content input {
+}
+
+.wrapper .content div {
+  -webkit-transition: all .2s linear 0s;
+  -moz-transition: all .2s linear 0s;
+  -o-transition: all .2s linear 0s;
+  -ms-transition: all .2s linear 0s;
+  transition: all .2s linear 0s;
+}
+
+.wrapper .content .loading-div.on {
+  visibility: visible;
+  opacity: 1;
+}
+
+.wrapper .content .loading-div {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.wrapper .content .input-div.off {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.wrapper .content .url-div.off {
+  display: none;
+}
+
+.wrapper .content .url-div.on {
+  display: block;
+}
