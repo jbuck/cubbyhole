@@ -15,6 +15,9 @@ A place to store your stuff.
 e.g. `NODE_ENV=production node server.js`
 
 ## Config
+
+Any of the values in `config/default.json` can be overridden by supplying different values with the same JSON structure in `config/runtime.json`. Make your host-specific changes there.
+
 ```
 {
   port: Server port to host the app.
