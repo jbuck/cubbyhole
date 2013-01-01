@@ -1,17 +1,19 @@
 {
   "name": "cubbyhole",
   "version": "0.0.1",
-  "description": "A place to store your stuff",
+  "description": "A place to store your stuff.",
   "repository": {
     "type": "git",
     "url": "https://github.com/jbuck/cubbyhole.git"
   },
   "contributors": [
-    "Jon Buckley <jon@jbuckley.ca>"
+    "Jon Buckley <jon@jbuckley.ca>",
+    "secretrobotron <secretrobotron@gmail.com>"
   ],
-  "license": "BSD",
+  "license": "MIT",
   "dependencies": {
     "node-uuid": "~1.4.0",
+    "config": "~0.4.18",
     "express": "~3.0.2"
   }
 }
