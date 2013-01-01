@@ -1,3 +1,12 @@
 {
-  "port": 8080
+  "port": 8080,
+  "showUrl": true,
+  "s3": {
+    "bucket": "override this value in runtime.json",
+    "key": "override this value in runtime.json",
+    "secret": "override this value in runtime.json",
+    "contentLengthRangeMin": 0,                       // 0 bytes
+    "contentLengthRangeMax": 104857600,               // 100MB in bytes
+    "defaultContentType": ""
+  }
 }

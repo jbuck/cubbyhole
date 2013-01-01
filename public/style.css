@@ -8,23 +8,15 @@ html, body {
 }
 
 .wrapper {
-  display: table;
-  height: 100%;
+  margin: 50px auto;
+}
+
+.content {
+  width: 100%;
   text-align: center;
-  margin: 0 auto;
-  position: relative;
-  z-index: 2;
 }
 
-.wrapper .content {
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.wrapper .content input {
-}
-
-.wrapper .content div {
+.content div {
   -webkit-transition: all .2s linear 0s;
   -moz-transition: all .2s linear 0s;
   -o-transition: all .2s linear 0s;
@@ -32,25 +24,27 @@ html, body {
   transition: all .2s linear 0s;
 }
 
-.wrapper .content .loading-div.on {
+.loading-div {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.url-div {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.content[state="uploading"] .loading-div {
+  visibility: visible;
+  opacity: 1;  
+}
+
+.content[state="uploading"] .input-div {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.content[state="show-url"] .url-div {
   visibility: visible;
   opacity: 1;
-}
-
-.wrapper .content .loading-div {
-  visibility: hidden;
-  opacity: 0;
-}
-
-.wrapper .content .input-div.off {
-  visibility: hidden;
-  opacity: 0;
-}
-
-.wrapper .content .url-div.off {
-  display: none;
-}
-
-.wrapper .content .url-div.on {
-  display: block;
 }

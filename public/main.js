@@ -2,81 +2,102 @@
 
   var fileInput;
   var fileInputButton;
-  var loadingDiv;
-  var inputDiv;
   var urlDiv;
   var uriContainer;
+  var contentDiv;
 
-  function upload(dataURI){
-
-  }
-
-  function prepareFiles(files){
-    loadingDiv.classList.add('on');
+  function uploadFiles(files){
     fileInput.disabled = true;
-    inputDiv.classList.add('off');
+    contentDiv.setAttribute('state', 'uploading');
 
     Array.prototype.forEach.call(files, function(file){
       var xhr = new XMLHttpRequest();
       xhr.open("GET", "/request", true);
 
-      xhr.addEventListener("load", function() {
+      xhr.addEventListener("load", function(){
         var json = JSON.parse(this.responseText);
+
+        var showUrl = json.showUrl;
 
         var form = new FormData();
 
-        form.append("policy", json.policyBase64);
-        form.append("signature", json.signature);
-        form.append("AWSAccessKeyId", json.key);
+        // filename, not AWS key
+        form.append('key', json.filenamePrefix);
 
-        json.policy.conditions.forEach(function(condition) {
-          if (Array.isArray(condition)) {
-            switch (condition[0]) {
-            case "starts-with"
+        form.append('AWSAccessKeyId', json.awsKey);
+        form.append('policy', json.policyBase64);
+        form.append('signature', json.signature);
+        form.append('Content-Type', 'text/plain');
 
-              break;
-            }
-          } else {
+        json.policy.conditions.forEach(function(condition){
+          if(!Array.isArray(condition)){
             // it's an object like {key: value}
-            Object.keys(condition).forEach(function(value) {
-              form.append(value, condition[value]);
+            Object.keys(condition).forEach(function(key){
+              if(key === 'bucket'){
+                bucket = condition[key];
+              }
+              form.append(key, condition[key]);
             });
           }
         });
 
-        form.append("file", file);
+        form.append('file', file);
 
+        var formSubmitXHR = new XMLHttpRequest();
+
+        formSubmitXHR.open('POST', window.location.protocol + '//' + json.bucket + '.s3.amazonaws.com/', true);
+
+        formSubmitXHR.addEventListener('load', function(e){
+          var url = 'http://s3.amazonaws.com/' + json.bucket + '/' + json.filenamePrefix;
+
+          fileInput.disabled = false;
+
+          if(showUrl){
+            uriContainer.href = url;
+            uriContainer.innerHTML = url;
+            contentDiv.setAttribute('state', 'show-url');
+          }
+          else {
+            contentDiv.setAttribute('state', 'idle');
+          }
+        }, false);
+
+        formSubmitXHR.addEventListener('progress', function(e){
+        }, false);
+
+        formSubmitXHR.addEventListener('error', function(e){
+          contentDiv.setAttribute('state', 'error');
+        }, false);
+
+        formSubmitXHR.send(form);
 
       }, false);
-      
+
       xhr.send();
 
-      /*var reader = new FileReader();
-      reader.onload = function(e){
-        upload(e.target.data);
-      };
-      reader.readAsDataURL(file);*/
+      fileInput.value = '';
+
     });
   }
 
   function dropFiles(e){
     e.preventDefault();
     e.stopPropagation();
+    uploadFiles(e.dataTransfer.files);
   }
 
   document.addEventListener('DOMContentLoaded', function(e){
-
+    contentDiv = document.querySelector('.content');
     fileInput = document.querySelector('.file-input');
     fileInputButton = document.querySelector('.file-input-submit');
-    loadingDiv = document.querySelector('.loading-div');
-    inputDiv = document.querySelector('.input-div');
     urlDiv = document.querySelector('.url-div');
     uriContainer = document.querySelector('.uri-container');
 
-    fileInputButton.addEventListener('click', function(e){
-      prepareFiles(fileInput.files);
-    }, false);
+    contentDiv.setAttribute('state', 'idle');
 
+    fileInputButton.addEventListener('click', function(e){
+      uploadFiles(fileInput.files);
+    }, false);
 
     document.addEventListener('drop', dropFiles, false);
     document.querySelector('.wrapper').addEventListener('drop', dropFiles, false);

@@ -6,7 +6,12 @@ var express = require("express"),
 app.use(express.static(__dirname + "/public"));
 
 app.get('/request', function(req, res) {
-  res.json(signer.create(config.s3));
+  var s3PolicyPackage = signer.create(config.s3)
+
+  // Do we want to show the url to the user when uploading is done?
+  s3PolicyPackage.showUrl = config.showUrl;
+
+  res.json(s3PolicyPackage);
 });
 
 app.listen(config.port);
