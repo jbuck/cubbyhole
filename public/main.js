@@ -19,6 +19,7 @@
     Array.prototype.forEach.call(files, function(file){
       var xhr = new XMLHttpRequest();
       xhr.open("GET", "/request", true);
+
       xhr.addEventListener("load", function() {
         var json = JSON.parse(this.responseText);
 
@@ -47,6 +48,7 @@
 
 
       }, false);
+      
       xhr.send();
 
       /*var reader = new FileReader();
