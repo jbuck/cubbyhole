@@ -5,6 +5,7 @@
   var urlDiv;
   var uriContainer;
   var contentDiv;
+  var percentCompleteContainer;
 
   function uploadFiles(files){
     fileInput.disabled = true;
@@ -62,11 +63,12 @@
           }
         }, false);
 
-        formSubmitXHR.addEventListener('progress', function(e){
-        }, false);
-
         formSubmitXHR.addEventListener('error', function(e){
           contentDiv.setAttribute('state', 'error');
+        }, false);
+
+        formSubmitXHR.upload.addEventListener('progress', function(e){
+          percentCompleteContainer.innerHTML = Math.round(e.loaded / e.total * 100) + '%';
         }, false);
 
         formSubmitXHR.send(form);
@@ -92,6 +94,7 @@
     fileInputButton = document.querySelector('.file-input-submit');
     urlDiv = document.querySelector('.url-div');
     uriContainer = document.querySelector('.uri-container');
+    percentCompleteContainer = document.querySelector('.upload-percent');
 
     contentDiv.setAttribute('state', 'idle');
 
